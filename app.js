@@ -1,5 +1,4 @@
-// Constructor for Customer Object
-function Customer(fullName, password, dob, gender, orderType, orderOption, imageUrl, phone) {
+function Customer(fullName, password, dob, gender, orderType, orderOption, imageUrl, phone, email) {
     this.fullName = fullName;
     this.password = password;
     this.dob = dob;
@@ -8,16 +7,15 @@ function Customer(fullName, password, dob, gender, orderType, orderOption, image
     this.orderOption = orderOption;
     this.imageUrl = imageUrl;
     this.phone = phone;
+    this.email = email;
 }
 
-// Array to store customer orders
 let orders = [];
 
-// Function to render customer orders
 function Orders() {
     const ordersContainer = document.getElementById("orders-container");
+    ordersContainer.innerHTML = "";
 
-    // Loop through orders and create cards
     for (let i = 0; i < orders.length; i++) {
         const order = orders[i];
         const orderCard = document.createElement("div");
@@ -26,6 +24,7 @@ function Orders() {
         orderCard.innerHTML = `
       <img src="${order.imageUrl}" alt="${order.fullName}">
       <h3>${order.fullName}</h3>
+      <p><strong>Email:</strong> ${order.email}</p>
       <p><strong>Date of Birth:</strong>${order.dob}</p>
       <p><strong>Gender:</strong> ${order.gender}</p>
       <p><strong>Phone:</strong> ${order.phone}</p>
@@ -37,43 +36,94 @@ function Orders() {
     }
 }
 
-// Function to handle form submission
+function validateForm(fullName, password, dob, email, phone) {
+    const errors = [];
+    const usernameRegex = /^\S+$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const dobRegex = /^\d{4}-\d{2}-\d{2}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^07\d{8}$/;
+
+
+    if (!usernameRegex.test(fullName)) {
+        errors.push("Username must not contain spaces.");
+    }
+
+    // Password validation
+    if (!passwordRegex.test(password)) {
+        errors.push(
+            "Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 number, and 1 special character."
+        );
+    }
+
+    // Date of Birth validation
+    if (!dobRegex.test(dob)) {
+        errors.push("Date of Birth must follow the format YYYY-MM-DD.");
+    }
+
+    // Email validation
+    if (!emailRegex.test(email)) {
+        errors.push("Please enter a valid email address.");
+    }
+
+    // Phone validation
+    if (!phoneRegex.test(phone)) {
+        errors.push("Phone number must be 10 digits and start with 07.");
+    }
+
+    return errors;
+}
+
 function handleFormSubmit(event) {
     event.preventDefault();
 
-    // Get form data
-    const fullName = document.getElementById("full-name").value;
+    const fullName = document.getElementById("full-name").value.trim();
     const password = document.getElementById("password").value;
     const dob = document.getElementById("dob").value;
     const gender = document.getElementById("gender").value;
-    const phone = document.getElementById("phone").value;
-    const imageUrl = document.getElementById("image-url").value;
+    const phone = document.getElementById("phone").value.trim();
+    const imageUrl = document.getElementById("image-url").value.trim();
+    const email = document.getElementById("email").value.trim();
 
-    // Get order type (checkboxes)
     const orderType = [];
     const orderTypeCheckboxes = document.querySelectorAll('input[name="order-type"]:checked');
     orderTypeCheckboxes.forEach(checkbox => orderType.push(checkbox.value));
 
-    // Get order option (radio buttons)
     const orderOption = document.querySelector('input[name="order-option"]:checked').value;
 
-    // Create customer object
-    const customer = new Customer(fullName, password, dob, gender, orderType, orderOption, imageUrl, phone);
+    // Validation
+    const errors = validateForm(fullName, password, dob, email, phone);
+    if (errors.length > 0) {
+        alert(errors.join("\n"));
+        return;
+    }
 
-    // Add to orders array
+    // Check if user exists
+    const userExists = orders.some(order => order.email === email || order.phone === phone);
+    if (userExists) {
+        alert("A user with this email or phone number already exists.");
+        return;
+    }
+
+    // Add user
+    const customer = new Customer(fullName, password, dob, gender, orderType, orderOption, imageUrl, phone, email);
+
     orders.push(customer);
 
-    // Save to local storage
     localStorage.setItem("orders", JSON.stringify(orders));
 
-    // Render orders
     Orders();
 
-    // Reset form
+    alert("Order successfully added!");
     event.target.reset();
 }
 
-// Load orders from local storage on page load
+function clearOrders() {
+    localStorage.removeItem("orders");
+    orders = [];
+    Orders();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const storedOrders = localStorage.getItem("orders");
     if (storedOrders) {
@@ -81,7 +131,9 @@ document.addEventListener("DOMContentLoaded", () => {
         Orders();
     }
 
-    // Attach form submit event
     const form = document.getElementById("order-form");
     form.addEventListener("submit", handleFormSubmit);
+
+    const clearButton = document.getElementById("clear-orders");
+    clearButton.addEventListener("click", clearOrders);
 });

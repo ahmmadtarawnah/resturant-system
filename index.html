@@ -25,62 +25,55 @@
         <!-- Form Section -->
         <section id="form-section">
             <h2>Place Your Order</h2>
-            <form id="order-form">
-                <label for="full-name">Full Name:</label>
-                <input type="text" id="full-name" name="full-name" required>
+        <form id="order-form">
+            <label for="full-name">Full Name:</label>
+            <input type="text" id="full-name" name="full-name" required />
+        
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required />
+        
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required />
+        
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required />
+        
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" required />
+        
+            <label for="image-url">Image URL:</label>
+            <input type="text" id="image-url" name="image-url" required />
+        
+            <fieldset>
+                <legend>Order Type:</legend>
+                <label><input type="checkbox" name="order-type" value="Type1" /> zinger</label>
+                <label><input type="checkbox" name="order-type" value="Type2" /> burger</label>
+            </fieldset>
+        
+            <fieldset>
+                <legend>Order Option:</legend>
+                <label><input type="radio" name="order-option" value="Option1" required /> sandwish</label>
+                <label><input type="radio" name="order-option" value="Option2" required /> combo</label>
+            </fieldset>
+        
+            <button type="submit">Submit</button>
+            <button type="button" id="clear-orders">Clear Orders</button>
+        </form>
+        <section id="orders-section">
+            <h2>Customer Orders</h2>     
+        </section>
+        <div id="orders-container"></div>
 
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-
-                <label for="dob">Date of Birth:</label>
-                <input type="date" id="dob" name="dob" required>
-
-                <label for="gender">Gender:</label>
-                <select id="gender" name="gender" required>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                </select>
-
-                <label for="phone">Phone Number:</label>
-                <input type="tel" id="phone" name="phone" required>
-
-                <label>Order Type:</label>
-                <div>
-                    <input type="checkbox" id="shawarma" name="order-type" value="Shawarma">
-                    <label for="shawarma">Shawarma</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="zinger" name="order-type" value="Zinger">
-                    <label for="zinger">Zinger</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="burger" name="order-type" value="Burger">
-                    <label for="burger">Burger</label>
-                </div>
-
-                <label>Order Option:</label>
-                <div>
-                    <input type="radio" id="combo" name="order-option" value="Combo" required>
-                    <label for="combo">Combo</label>
-                </div>
-                <div>
-                    <input type="radio" id="sandwich" name="order-option" value="Sandwich" required>
-                    <label for="sandwich">Sandwich</label>
-                </div>
-
-                <label for="image-url">Image URL:</label>
-                <input type="url" id="image-url" name="image-url" required>
-
-                <button type="submit">Submit Order</button>
-            </form>
         </section>
 
         <!-- Orders Section -->
-        <section id="orders-section">
-            <h2>Customer Orders</h2>
-            <div id="orders-container"></div>
-        </section>
+       
     </main>
 
     <!-- Footer -->
